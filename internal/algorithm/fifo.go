@@ -1,7 +1,5 @@
 package algorithm
 
-const queueLength = 10
-
 type Fifo struct{}
 
 func contains(array []int, element int) bool {
@@ -15,12 +13,12 @@ func contains(array []int, element int) bool {
 }
 
 func (f Fifo) Run(pageReferences []int, framesNumber int) int {
-	var queue [queueLength]int
+	var queue = make([]int, 0)
 	pageFaults := 0
 	initialQueuePosition := 0
 
 	for index, pageReference := range pageReferences {
-		if index <= queueLength {
+		if index <= framesNumber {
 			queue[index] = pageReference
 			pageFaults++
 		}
@@ -29,7 +27,7 @@ func (f Fifo) Run(pageReferences []int, framesNumber int) int {
 
 		if !isPageinQueue {
 			queue[initialQueuePosition] = pageReference
-			initialQueuePosition = (initialQueuePosition + 1) % queueLength
+			initialQueuePosition = (initialQueuePosition + 1) % framesNumber
 
 			pageFaults++
 		}
