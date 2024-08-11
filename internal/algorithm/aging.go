@@ -14,7 +14,7 @@ func NewAging() *Aging {
 	return &Aging{age: make(map[int]uint8)}
 }
 
-func (a *Aging) Run(pageReferences []int, framesNumber int) {
+func (a *Aging) Run(pageReferences []int, framesNumber int) int {
 	for _, page := range pageReferences {
 		// It is full and Page is not mapped
 		if !a.isAlive(page) && framesNumber <= a.pagesAlive {
@@ -37,6 +37,8 @@ func (a *Aging) Run(pageReferences []int, framesNumber int) {
 		a.addInAge(page)
 		a.clock()
 	}
+
+	return a.pageFaultCounter
 }
 
 func (a *Aging) isAlive(page int) bool {
@@ -79,8 +81,4 @@ func (a *Aging) clock() {
 	for page, age := range a.age {
 		a.age[page] = age >> 1
 	}
-}
-
-func (a *Aging) PageFault() int {
-	return a.pageFaultCounter
 }

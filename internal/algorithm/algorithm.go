@@ -1,5 +1,5 @@
 package algorithm
 
-type Algorithms interface {
+type Algorithm interface {
 	Run(pageReferences []int, framesNumber int) int
 }

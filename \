@@ -1,0 +1,33 @@
+package pipeline
+
+import (
+	"io"
+
+	"github.com/jonathatargino/fifo-vs-aging/internal/algorithm"
+)
+
+type Option func(*Pipeline)
+
+type Pipeline struct {
+	Algorithm algorithm.Algorithm
+	Writer    io.Writer
+}
+
+func WithAlgoritm(alg algorithm.Algorithm) Option {
+	return func(p *Pipeline) {
+		p.Algorithm = alg
+	}
+}
+
+func WithWriter(w io.Writer) Option {
+	return func(p *Pipeline) {
+		p.Writer = w
+	}
+}
+
+func NewPipeline(opts ...Option) *Pipeline {
+	p := &Pipeline{}
+
+	for _, opt := range opts {
+	}
+}

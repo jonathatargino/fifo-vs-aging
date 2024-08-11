@@ -2,6 +2,8 @@ package generator
 
 import "math/rand"
 
+type Generator func(int, int) []int
+
 func NewPageReferences(pagesNumber, referencesLength int) []int {
 	pageReferences := make([]int, 0)
 
