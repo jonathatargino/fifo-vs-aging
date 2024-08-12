@@ -9,16 +9,19 @@ import (
 
 func main() {
 	alging := algorithm.NewAging()
-	fifo := algorithm.NewFifo()
+	// fifo := algorithm.NewFifo()
 
-	fileResult, err := os.Open("cmd/result.txt")
+	algingNamed := pipeline.AlgorithmNamed{Algorithm: alging, Name: "Aging"}
+
+	file, err := os.Create("cmd/result.txt")
 	if err != nil {
 		panic(err)
 	}
+	defer file.Close()
 
 	pipeline.NewPipeline(
-		pipeline.WithAlgoritms(alging, fifo),
-		pipeline.WithGeneratorParams(10, 2),
-		pipeline.WithWriter(fileResult),
+		pipeline.WithAlgoritms(algingNamed),
+		pipeline.WithGeneratorParams(10, 20),
+		pipeline.WithWriter(file),
 	).Run()
 }

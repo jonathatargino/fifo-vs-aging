@@ -1,0 +1,3 @@
+Test case for Aging:
+Input: 8 4 9 3 7 0 8 4 9 0 7 3 5 1 1 8 6 3 3 4 
+Number of Fault Pages: 9

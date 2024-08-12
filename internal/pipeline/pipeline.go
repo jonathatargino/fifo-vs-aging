@@ -1,6 +1,7 @@
 package pipeline
 
 import (
+	"fmt"
 	"io"
 
 	"github.com/jonathatargino/fifo-vs-aging/internal/algorithm"
@@ -11,11 +12,16 @@ type Option func(*Pipeline)
 
 type Pipeline struct {
 	Writer     io.Writer
-	Algorithms []algorithm.Algorithm
+	Algorithms []AlgorithmNamed
 	Input      []int
 }
 
-func WithAlgoritms(algs ...algorithm.Algorithm) Option {
+type AlgorithmNamed struct {
+	algorithm.Algorithm
+	Name string
+}
+
+func WithAlgoritms(algs ...AlgorithmNamed) Option {
 	return func(p *Pipeline) {
 		p.Algorithms = algs
 	}
@@ -27,9 +33,9 @@ func WithWriter(w io.Writer) Option {
 	}
 }
 
-func WithGeneratorParams(numberOfPages, numberOfFrames int) Option {
+func WithGeneratorParams(pagesNumber, referencesLength int) Option {
 	return func(p *Pipeline) {
-		p.Input = generator.NewPageReferences(numberOfFrames, numberOfFrames)
+		p.Input = generator.NewPageReferences(pagesNumber, referencesLength)
 	}
 }
 
@@ -45,6 +51,7 @@ func NewPipeline(opts ...Option) *Pipeline {
 
 func (p *Pipeline) Run() {
 	for _, algorithm := range p.Algorithms {
+		fmt.Fprintf(p.Writer, "Test case for %s:\n", algorithm.Name)
 
 		p.Writer.Write([]byte("Input: "))
 		p.Writer.Write(intsToBytes(p.Input))
@@ -53,14 +60,14 @@ func (p *Pipeline) Run() {
 		// TODO Let dinamic
 		result := algorithm.Run(p.Input, 10)
 
-		p.Writer.Write([]byte{byte(result)})
+		fmt.Fprintf(p.Writer, "Number of Fault Pages: %d\n", result)
 	}
 }
 
 func intsToBytes(ints []int) []byte {
-	bytes := make([]byte, len(ints))
-	for i, v := range ints {
-		bytes[i] = byte(v)
+	var str string
+	for _, v := range ints {
+		str += fmt.Sprintf("%d ", v)
 	}
-	return bytes
+	return []byte(str)
 }
