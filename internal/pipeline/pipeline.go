@@ -50,15 +50,15 @@ func NewPipeline(opts ...Option) *Pipeline {
 }
 
 func (p *Pipeline) Run() {
+	p.Writer.Write([]byte("Input: "))
+	p.Writer.Write(intsToBytes(p.Input))
+	p.Writer.Write([]byte("\n"))
+
 	for _, algorithm := range p.Algorithms {
 		fmt.Fprintf(p.Writer, "Test case for %s:\n", algorithm.Name)
 
-		p.Writer.Write([]byte("Input: "))
-		p.Writer.Write(intsToBytes(p.Input))
-		p.Writer.Write([]byte("\n"))
-
 		// TODO Let dinamic
-		result := algorithm.Run(p.Input, 10)
+		result := algorithm.Run(p.Input, 2)
 
 		fmt.Fprintf(p.Writer, "Number of Fault Pages: %d\n", result)
 	}

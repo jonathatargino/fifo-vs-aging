@@ -22,9 +22,10 @@ func (f *Fifo) Run(pageReferences []int, framesNumber int) int {
 	initialQueuePosition := 0
 
 	for index, pageReference := range pageReferences {
-		if index <= framesNumber {
-			queue[index] = pageReference
+		if index < framesNumber {
+			queue = append(queue, pageReference)
 			pageFaults++
+			continue
 		}
 
 		isPageinQueue := contains(queue[:], pageReference)

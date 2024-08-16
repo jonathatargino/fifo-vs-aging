@@ -1,9 +1,5 @@
 package algorithm
 
-import (
-	"log"
-)
-
 type Aging struct {
 	age              map[int]uint8
 	pageFaultCounter int
@@ -51,16 +47,12 @@ func (a *Aging) removeOlder() {
 	var pageTarget int
 
 	for page, age := range a.age {
-
-		log.Printf("Page: %d Age: %8b", page, age)
-
 		if age < older {
 			pageTarget = page
 			older = age
 		}
 	}
 
-	log.Println("Removing page:", pageTarget)
 	delete(a.age, pageTarget)
 }
 
@@ -72,7 +64,6 @@ func (a *Aging) addInAge(page int) {
 }
 
 func (a *Aging) setNewPageInAge(page int) {
-	log.Println("Adding page:", page)
 	a.pagesAlive++
 	a.age[page] = 128
 }
